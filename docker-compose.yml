@@ -2,17 +2,18 @@ version: "3.9"
 
 services:
   app:
-    build: simple_project_for_deploy
-    # command: bash -c entrypoint.sh
+    build: ./simple_project_for_deploy
     container_name: simple_project
-    ports:
-      - 80:8000
+    volumes:
+      - static_files:/usr/src/static
+    expose:
+      - 8000
     depends_on:
       - postgres_db
 
   postgres_db:
     image: postgres:14
-    container_name: simple_project_db
+    container_name: postgres_db_container
     restart: always
     environment:
       - POSTGRES_PASSWORD=12345
@@ -23,10 +24,21 @@ services:
 
   redis_cache:
     image: redis
-    container_name: redis_cache
+    container_name: redis_cache_container
     volumes:
       - redis_cache_data:/data
+
+  nginx:
+    build: ./nginx
+    container_name: nginx_container
+    ports:
+      - 80:80
+    volumes:
+      - static_files:/usr/src/static
+    depends_on:
+      - app
 
 volumes:
   postgres_db_data:
   redis_cache_data:
+  static_files:
