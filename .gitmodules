@@ -1,0 +1,3 @@
+[submodule "simple_project_for_deploy"]
+	path = simple_project_for_deploy
+	url = git@github.com:Rwwwrl/Simple-django-project-for-deploy-testing.git
